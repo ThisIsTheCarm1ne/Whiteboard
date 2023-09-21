@@ -23,9 +23,9 @@ export default function Header() {
   const { logout, user } = usePocket();
 
   return (
-  <header class='flex flex-row items-center justify-between bg-green-500'>
-    <img alt='logo' src='' class='' />
-    <div class=''>
+  <header className='flex flex-row items-center justify-between bg-green-500 px-5 py-1'>
+    <img alt='logo' src='/favicon.svg' className='h-8' />
+    <div className=''>
     {(!user) 
     ? <ButtonLink href='/signup' text='Sign up'/>
     : <p>{user.username}</p>

@@ -10,9 +10,9 @@ export default function AddTaskPopup({ taskId }) {
   const [task, setTask] = useState();
   const [newTask, setNewTask] = useState('');
 
-  const inputStyle = `w-full mb-3 p-3 bg-transparent 
+  const inputStyle: string = `w-full p-3 bg-transparent 
   border-green-200 border-2 rounded
-  focus:outline-none focus:border-green-500`;
+  focus:outline-none focus:border-green-500 mr-2`;
 
   const { user, getSingleTODO, updTODO } = usePocket();
 
@@ -31,7 +31,6 @@ export default function AddTaskPopup({ taskId }) {
   const handleAddTaskToExistedList = useCallback(
     async function addTaskToExisted() {
       if(newTask !== '') {
-        console.log(newTask);
         const updatedTask = {...task};
         const taskObj = {task: newTask, isDone: false};
 
@@ -40,6 +39,7 @@ export default function AddTaskPopup({ taskId }) {
         await setTask(updatedTask);
         await updTODO(task);
         await setNewTask('');
+        window.location.reload();
       }
     },
     [updTODO, newTask],
@@ -47,15 +47,15 @@ export default function AddTaskPopup({ taskId }) {
 
 
   return (
-    <form class='flex flex-col items-center'>
+    <form className='flex flex-row items-center mt-5'>
       <input
         type='text'
         placeholder='Tasks'
-        class={inputStyle}
+        className={inputStyle}
         onChange={(e) => setNewTask(e.target.value)}
         value={newTask}
       />
-      <button type='button' onClick={() => handleAddTaskToExistedList()}>+</button>
+      <button type='button' className='bg-emerald-200' onClick={() => handleAddTaskToExistedList()}>+</button>
     </form>
   )
 }

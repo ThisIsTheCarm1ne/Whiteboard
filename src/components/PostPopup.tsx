@@ -5,12 +5,7 @@ import React, {
 } from 'react'
 
 import { usePocket } from '../contexts/PocketContext';
-
-//related to send data
-interface taskObj {
-  task: string,
-  isDone: boolean
-}
+import { taskObj } from '../interfaces/taskObj';
 
 export default function PostPopup({onClose}) {
   const { user, addTODO } = usePocket();
@@ -53,7 +48,7 @@ export default function PostPopup({onClose}) {
   focus:outline-none focus:border-green-500`;
 
   return (
-    <div class='absolute
+    <div className='absolute
                 top-1/2
                 left-1/2
                 transform
@@ -64,27 +59,30 @@ export default function PostPopup({onClose}) {
                 border-green-500
                 border-4
                 rounded
-                items-center
                 p-4
                 w-1/3
     '>
-      <button onClick={onClose}>X</button>
-      <form onSubmit={handleOnSubmit} class='flex flex-col items-center'>
+      <div className='w-full flex justify-end'>
+        <button className='mb-2 ' onClick={onClose}>X</button>
+      </div>
+      <form onSubmit={handleOnSubmit} className='flex flex-col items-center'>
         <input
           type='text'
           placeholder='Title'
           ref={titleRef}
-          class={inputStyle}
+          className={inputStyle}
         />
-        <input
-          type='text'
-          placeholder='Tasks'
-          onChange={(e) => setTask(e.target.value)}
-          value={task}
-          class={inputStyle}
-        />
-        <button onClick={handleAddTask} type='button'>+</button>
-        <button type='submit'>Add TODO</button>
+        <div className='w-full'>
+          <input
+            type='text'
+            placeholder='Tasks'
+            onChange={(e) => setTask(e.target.value)}
+            value={task}
+            className={inputStyle + ' w-10/12'}
+          />
+          <button className='ml-3 bg-emerald-200' onClick={handleAddTask} type='button'>+</button>
+        </div>
+        <button className='flex-1 mr-2 bg-emerald-200' type='submit'>Add TODO</button>
       </form>
       <ul>
         {tasks.map((taskObj, i) => (

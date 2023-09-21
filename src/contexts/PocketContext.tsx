@@ -10,6 +10,7 @@ import PocketBase from 'pocketbase';
 import { useInterval } from 'usehooks-ts';
 import jwtDecode from 'jwt-decode';
 import ms from 'ms';
+import { taskObj } from '../interfaces/taskObj';
 
 const BASE_URL = 'http://127.0.0.1:8090';
 const fiveMinutesInMs = ms('5 minutes');
@@ -17,10 +18,6 @@ const twoMinutesInMs = ms('2 minutes');
 
 const PocketContext = createContext({});
 
-interface taskObj {
-  task: string,
-  isDone: boolean
-}
 interface TODOObj{
   title: string,
   tasks: taskObj[],
@@ -52,19 +49,19 @@ export const PocketProvider = ({ children }) => {
       .create({Owner: userId, Title: title, Tasks: tasks});
   }, []);
 
-  const getTODOs = useCallback(async (userId) => {
+  const getTODOs = useCallback(async (userId: string) => {
     return pb.collection('TODOLists').getFullList({
       sort: '-created', filter: `Owner="${userId}"`
     }).then((res) => res);
   }, []);
 
-  const getSingleTODO = useCallback(async (todoId) => {
+  const getSingleTODO = useCallback(async (todoId: string) => {
     return pb.collection('TODOLists').getOne(todoId, {
       expand: 'Owner',
     }).then((res) => res);
   }, []);
 
-  const removeSingleTODO = useCallback(async (todoId) => {
+  const removeSingleTODO = useCallback(async (todoId: string) => {
     return pb.collection('TODOLists').delete(todoId);
   }, []);
 

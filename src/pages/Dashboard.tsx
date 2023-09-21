@@ -9,12 +9,7 @@ import { usePocket } from '../contexts/PocketContext';
 import Header from '../components/Header.tsx';
 import PostPopup from '../components/PostPopup.tsx';
 import AddTaskPopup from '../components/AddTaskPopup.tsx';
-
-//related to send data
-interface taskObj {
-  task: string,
-  isDone: boolean
-}
+import { taskObj } from '../interfaces/taskObj';
 
 export default function Dashboard() {
   const [isPostPopupVisible, setPostPopupVisible] = useState<boolean>(false);
@@ -62,13 +57,15 @@ export default function Dashboard() {
       let updatedTasks = [...tasks];
       updatedTasks[i].Tasks = updatedTasks[i].Tasks.filter((task) => task.isDone === false);
 
+      await setTasks(updatedTasks);
+
       if (updatedTasks[i].Tasks.length === 0) {
         await removeSingleTODO(updatedTasks[i].id)
+
+        window.location.reload();
       } else {
         await updTODO(updatedTasks[i]);
       }
-      await setTasks(updatedTasks);
-      window.location.reload();
     },
     [updTODO, removeSingleTODO, tasks],
   )
@@ -82,39 +79,38 @@ export default function Dashboard() {
   return (
   <>
     <Header />
-    <div class='flex h-screen items-start mt-20'>
-      <button class='h-4/5 ml-20' onClick={() => setPostPopupVisible(isPostPopupVisible => !isPostPopupVisible)}>
-        <h2 class='px-15 py-5'>Create a new TODO list</h2>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <div className='flex h-screen items-start mt-20'>
+      <button className='h-4/5 ml-20' onClick={() => setPostPopupVisible(isPostPopupVisible => !isPostPopupVisible)}>
+        <h2 className='px-15 py-5'>Create a new TODO list</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 m-auto">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
       {isPostPopupVisible && <PostPopup onClose={() => setPostPopupVisible(false) }/>}
       {tasks.map((task, i) => (
-        <div class='mx-12 h-4/5' key={i}>
-          <div class='bg-amber-500 p-5 rounded-t'>
+        <div className='mx-12 h-4/5' key={i}>
+          <div className='bg-amber-500 p-5 rounded-t'>
             <h2>{task.Title}</h2>
-            <p>{task.created}</p>
-            <p>00 00 0000</p>
+            <p>{(task.created.split(' '))[0]}</p>
           </div>
-          <ul class='bg-transparent px-16 py-5 border-amber-500 border-2 rounded-b'>
+          <ul className='bg-transparent px-16 py-5 border-amber-500 border-2 rounded-b'>
             {task.Tasks.map((taskObj, x) => (
               taskObj.isDone ? (
-                <li key={x} class='mb-5 text-green-500'
+                <li key={x} className='mb-5 text-green-500'
                 onDoubleClick={() => handleUnMark(i, x)}>
                   <abbr title='Double-click to "unmark" it'><s>{taskObj.task}</s></abbr>
                 </li>
               ) : (
-                <li key={x} class='mb-5 cursor-pointer' onClick={() => handleMark(i, x)}>
+                <li key={x} className='mb-5 cursor-pointer' onClick={() => handleMark(i, x)}>
                   <abbr title='Click to mark it as "done"'>{taskObj.task}</abbr>
                 </li>
               )
             ))}
-              <li class='w-full flex'>
-                <button class='flex-1 mr-2' onClick={() => handleAddPopup(i)}>+</button>
-                {isAddPopupVisible[i] && <AddTaskPopup taskId={task.id} onClose={() => handleAddPopup(false) }/>}
-                <button class='flex-1 mr-2' onClick={() => handleDeleteCompletedTask(i)}>-</button>
+              <li className='w-full flex'>
+                <button className='flex-1 mr-2' onClick={() => handleAddPopup(i)}>+</button>
+                <button className='flex-1 mr-2' onClick={() => handleDeleteCompletedTask(i)}>-</button>
               </li>
+              {isAddPopupVisible[i] && <AddTaskPopup taskId={task.id} onClose={() => handleAddPopup(false) }/>}
           </ul>
         </div>
       ))}

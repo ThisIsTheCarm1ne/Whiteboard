@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { usePocket } from '../contexts/PocketContext';
 
@@ -17,9 +17,9 @@ export default function Login () {
   const handleOnSubmit = useCallback(
     async (evt) => {
       try {
-      evt?.preventDefault();
-      await login(loginRef.current.value, passwordRef.current.value);
-      navigate('/dashboard');
+        evt?.preventDefault();
+        await login(loginRef.current.value, passwordRef.current.value);
+        navigate('/dashboard');
       } catch(err) {
         setError(err.message);
         console.log(err.message);
@@ -44,7 +44,8 @@ export default function Login () {
           <input placeholder='Login' type='login' ref={loginRef} className={inputStyle}/>
           <input placeholder='Password' type='password' ref={passwordRef} className={inputStyle}/>
         </div>
-        <button type='submit'>Login</button>
+        <button className='bg-emerald-200' type='submit'>Login</button>
+        <button className='bg-emerald-200 ml-2' type='button' onClick={() => navigate('/signup')}>Sign up</button>
       </form>
     </section>
   );
